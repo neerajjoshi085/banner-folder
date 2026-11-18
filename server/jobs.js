@@ -203,7 +203,7 @@ export class JobManager {
   }
 
   settings(job) {
-    const { timeout, ...rest } = job.options;
+    const { timeout, requestTimeout, ...rest } = job.options;
     return {
       ...rest,
       timeoutSeconds: Math.round(timeout / 1000),

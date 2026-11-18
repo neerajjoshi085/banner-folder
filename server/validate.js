@@ -14,6 +14,7 @@ export const LIMITS = Object.freeze({
 export const DEFAULT_MAX_UPSCALE = LIMITS.maxUpscale[1];
 export const DEFAULT_MOBILE_PASS = false;
 export const DEFAULT_TIMEOUT_SECONDS = 30;
+const WEB_REQUEST_TIMEOUT_MS = 15_000;
 export const CROPS = Object.freeze(['attention', 'entropy', 'center']);
 export const MAX_LOGO_BYTES = 8 * 1024 * 1024;
 
@@ -193,6 +194,7 @@ export function createRequestParser({ allowPrivateUrls = false, lookup = dns.pro
       gallery: false,
       mobilePass: bool(body, 'mobilePass', DEFAULT_MOBILE_PASS),
       timeout: number(body, 'timeoutSeconds', DEFAULT_TIMEOUT_SECONDS, 'Page load timeout') * 1000,
+      requestTimeout: WEB_REQUEST_TIMEOUT_MS,
     };
 
     return { url: url.href, name: packageName(body.name, url), options, logo: await parseLogo(body) };

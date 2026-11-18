@@ -107,6 +107,7 @@ test('a request becomes packageWebsite() options with defaults', async () => {
     gallery: false,
     mobilePass: false,
     timeout: 30000,
+    requestTimeout: 15000,
   });
 });
 

@@ -92,15 +92,15 @@ async function runPass(browser, url, profile, opts, log) {
       throw new PackagerError(`Could not open ${url} (${profile.name}): ${firstLine(err)}`, { cause: err, code: 'E_NAVIGATION' });
     }
     const status = response ? response.status() : 0;
-    await page.waitForLoadState('load', { timeout: Math.min(opts.timeout, 30000) }).catch(() => {});
-    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+    await page.waitForLoadState('load', { timeout: Math.min(opts.timeout, 10000) }).catch(() => {});
+    await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
     const scroll = await page.evaluate(autoScrollPage, opts.scrollMs).catch((err) => {
       log.debug(`auto-scroll failed: ${firstLine(err)}`);
       return null;
     });
     if (scroll) log.debug(`${profile.name}: scrolled ${scroll.height}px in ${scroll.ms}ms`);
-    await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
-    await page.waitForTimeout(800);
+    await page.waitForLoadState('networkidle', { timeout: 4000 }).catch(() => {});
+    await page.waitForTimeout(500);
 
     const found = await page.evaluate(collectImageCandidates);
     const title = await page.title().catch(() => '');

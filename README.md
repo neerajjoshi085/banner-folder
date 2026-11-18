@@ -58,6 +58,8 @@ The included Render service uses the free plan, which may sleep when idle and ha
 
 Jobs are kept in memory: restarting the server forgets them, and their folders are deleted on the next start.
 
+The web scanner limits image-download requests to 15 seconds and shortens the browser's page-settle waits to reduce long stalls on the free Render plan. Sites with unusually slow image hosts may take longer or omit those images; rebuild the package if needed.
+
 ## How it works
 
 1. `POST /api/jobs` validates the settings and queues a job. Its ID becomes the page address (`/#/jobs/<id>`),
