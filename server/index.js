@@ -36,6 +36,21 @@ await jobs.init();
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', config.trustProxy);
+const corsOrigins = new Set((process.env.CORS_ORIGINS || '').split(',').map((origin) => origin.trim()).filter(Boolean));
+app.use((req, res, next) => {
+  const origin = req.get('Origin');
+  if (!origin) return next();
+  if (!corsOrigins.has(origin)) {
+    if (req.method === 'OPTIONS') return res.sendStatus(403);
+    return next();
+  }
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.vary('Origin');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
 app.use((req, res, next) => {
   res.set({ 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY' });
   if (!dev) res.set('Content-Security-Policy', CSP);

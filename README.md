@@ -43,6 +43,18 @@ All settings are environment variables.
 | `JOB_TTL_MINUTES` | `360` | How long a finished package (files and ZIP) is kept. |
 | `TRUST_PROXY` | off | Set when running behind a reverse proxy (`true`, a hop count, or addresses) so client IPs are read from `X-Forwarded-For`. |
 | `ALLOW_PRIVATE_URLS` | off | `1` lets the server open localhost and private-network addresses. Leave off on a public server. |
+| `CORS_ORIGINS` | empty | Comma-separated browser origins allowed to call the API, such as `https://banner-folder.vercel.app`. |
+
+## Deploy the frontend on Vercel and the API on Render
+
+The web app needs a persistent Node process for its Express API, job queue, Chromium browser and temporary package files. Vercel can host the frontend, but deploying only the Vite site does not provide `/api/config` or `/api/jobs` (those requests return 404).
+
+1. Create a Render Blueprint from this repository and use the included `render.yaml`. The Docker image installs Chromium and starts the Express server. Set `CORS_ORIGINS` to the exact Vercel site origin, for example `https://banner-folder.vercel.app` (no trailing slash).
+2. Copy the Render service URL, such as `https://your-api.onrender.com`.
+3. In the Vercel project, add the build environment variable `VITE_API_BASE_URL` with that Render URL (no trailing slash), then redeploy the frontend.
+4. Verify `https://your-api.onrender.com/healthz` returns JSON with `"ok": true`, and that `https://your-api.onrender.com/api/config` returns the packager configuration.
+
+The included Render service uses the free plan, which may sleep when idle and has limited memory. If Chromium jobs run out of memory or time out, move the service to a plan with more resources. Jobs and generated files are temporary and are lost when the service restarts.
 
 Jobs are kept in memory: restarting the server forgets them, and their folders are deleted on the next start.
 
