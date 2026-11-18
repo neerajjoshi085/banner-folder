@@ -1,0 +1,45 @@
+{
+  "name": "website-image-packager",
+  "version": "1.0.0",
+  "description": "Extract logos and photos from any website (including JavaScript-rendered sites) and package them into Discovery / Remarketing ad-banner folders at exact pixel sizes.",
+  "main": "src/index.js",
+  "bin": {
+    "website-images": "bin/website-images.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "scripts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "install-browser": "playwright install chromium",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "banner",
+    "google-ads",
+    "discovery",
+    "remarketing",
+    "demand-gen",
+    "image",
+    "scraper",
+    "logo",
+    "gallery",
+    "sharp",
+    "playwright",
+    "cli"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "playwright": "^1.49.0",
+    "sharp": "^0.34.5",
+    "yazl": "^3.3.1"
+  }
+}
